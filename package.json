@@ -1,0 +1,21 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "This application allows users to hire a verified companion to accompany them to any place they wish to visit, such as malls, markets, hospitals, or events. Unlike taxi services where the destination and time are fixed, this platform enables a flexible, time-based experience. A user selects a companion, both connect through in-app chat or call, and once they meet, a trip timer starts. The user can end the trip anytime, and the fare is calculated based on the total time spent together. Companions set their hourly rates, and the entire system prioritizes safety through verified profiles, GPS tracking, SOS features, and emergency contact integration. Everything runs from a single app with two roles: User and Companion.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "MUKHTAR ALAM",
+  "license": "ISC",
+  "dependencies": {
+    "cloudinary": "^2.8.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.0.0"
+  }
+}
