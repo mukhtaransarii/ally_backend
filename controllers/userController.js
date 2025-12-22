@@ -2,7 +2,7 @@ import Otp from "../models/Otp.js";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken"
 
-const generateOtp = () => Math.floor(100000 + Math.random() * 900000).toString();
+const generateOtp = () => Math.floor(1000 + Math.random() * 9000).toString();
 
 // SEND OTP
 export const sendOtp = async (req, res) => {

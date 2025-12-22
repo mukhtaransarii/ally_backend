@@ -5,24 +5,16 @@ const userSchema = new mongoose.Schema({
   isProfileComplete: { type: Boolean, default: false },
 
   // Basic profile
+  avatar: { type: String, default: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQpULH7XQOEGAcUk6r_1LKgO2QF4f11_wc8i7iBRXLeyeZsU8LZGEoOtY&s=10" },
   name: String,
   email: { type: String, required: true },
+  gender: { type: String, enum: ["male", "female", "other"] },
+  username: { type: String, unique: true, lowercase: true, trim: true, match: /^[a-z0-9_.]{3,20}$/, default: () => "user" + Math.floor(Date.now() / 1000) },
   phone: String,
   bio: String,
-  avatar: String,
-  gender: { type: String, enum: ["male", "female", "other"] },
-
-  // Permanent Address
-  address: {
-    street: String,
-    city: String,
-    state: String,
-    pincode: String,
-  },
-
-  // Previous fields you already had
-  lat: Number,
-  lng: Number,
+  skills: { type: [String]},
+  dob: {type: Date},
+  
   active: { type: Boolean, default: false },
   verified: { type: Boolean, default: false },
 
@@ -31,15 +23,11 @@ const userSchema = new mongoose.Schema({
     type: { type: String, default: "Point" },
     coordinates: { type: [Number], default: [0, 0] },
   },
-
-  // Emergency Contact
-  emergencyContact: {
-    name: String,
-    phone: String,
-    relation: String,
-  },
-
-  deviceToken: [String],
+  
+  // (Optional but use full)
+  lat: Number,
+  lng: Number,
+  
 }, { timestamps: true });
 
 // Indexes
