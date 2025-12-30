@@ -8,6 +8,7 @@ export const findNearestCompanion = async (req, res) => {
     const partners = await User.find({
       role: "partner",
       active: true,
+      status: "available",
       location: {
         $near: {
           $geometry: { type: "Point", coordinates: [lng, lat] },

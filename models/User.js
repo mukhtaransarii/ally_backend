@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema({
   skills: { type: [String]},
   dob: {type: Date},
   
+  status: {type: String, enum: ["available", "on_trip"], default: "available"},
   active: { type: Boolean, default: false },
   verified: { type: Boolean, default: false },
 
