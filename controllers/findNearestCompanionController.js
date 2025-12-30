@@ -3,8 +3,13 @@ import User from "../models/User.js";
 export const findNearestCompanion = async (req, res) => {
   try {
     const { lat, lng } = req.body;
-    if (lat == null || lng == null) return res.status(400).json({ message: "Location required" });
-   
+    if (lat == null || lng == null)
+      return res.status(400).json({
+        success: false,
+        companions: [],
+        message: "Location required",
+      });
+
     const partners = await User.find({
       role: "partner",
       active: true,
@@ -12,29 +17,31 @@ export const findNearestCompanion = async (req, res) => {
       location: {
         $near: {
           $geometry: { type: "Point", coordinates: [lng, lat] },
-          $maxDistance: 100000, // 100km
+          $maxDistance: 100000,
         },
       },
     });
-    
-    if (!partners.length) {
+
+    if (!partners.length)
       return res.json({
         success: true,
-        companions: [], // empty array instead of null
+        companions: [],
         message: "No companions nearby, wait a bit.",
       });
-    }
-    
-    // Optionally add ratePerHour to each partner
-    const result = partners.map(p => {
-      const obj = p.toObject();
-      obj.ratePerHour = 299;
-      return obj;
+
+    const result = partners.map(p => ({
+      ...p.toObject(),
+      ratePerHour: 299,
+    }));
+
+    return res.json({
+      success: true,
+      companions: result,
+      message: "Success companions found",
     });
-    
-    return res.json({ success: true, companions: result, message: "Success companions found" });
+
   } catch (error) {
     console.log("Nearest companion error:", error);
-    return res.status(500).json({ message: "Server error" });
+    return res.status(500).json({ success: false, companions: [],  message: "Server error" });
   }
 };

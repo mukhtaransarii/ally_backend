@@ -8,7 +8,7 @@ export const confirmTrip = async (req, res) => {
     const userId = req.user.id;
     const { companionId, pickup, distance, duration } = req.body;
 
-    if (!companionId || !pickup) return res.status(400).json({ message: "Missing data" });
+    if (!companionId || !pickup) return res.status(400).json({ success: false, message: "Missing data" });
     
     // 🔒 ATOMIC LOCK
     const companion = await User.findOneAndUpdate(
@@ -42,7 +42,7 @@ export const confirmTrip = async (req, res) => {
     const io = getIo();
     io.to(companionId).emit("trip_notification", {trip});
     
-    res.status(201).json({ success: true, trip });
+    res.status(201).json({ success: true, message: "Trip created successfully", trip });
   } catch (e) {
     console.error("CONFIRM TRIP ERROR:", e);
     res.status(500).json({ message: "Trip creation failed" });
@@ -64,9 +64,7 @@ export const cancelTrip = async (req, res) => {
     if (!trip)
       return res.status(404).json({ success: false, message: "Trip not found or already ended" });
     
-    if (trip.companion.toString() === userId) {
-      await User.findByIdAndUpdate(userId, { status: "available" });
-    }
+    await User.findByIdAndUpdate(trip.companion, { status: "available" });
     
     const io = getIo();
     // 🔔 notify BOTH user & partner
@@ -79,3 +77,27 @@ export const cancelTrip = async (req, res) => {
     res.status(500).json({ message: "Cancel failed" });
   }
 };
+
+
+export const acceptTrip = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { tripId } = req.body;
+    
+    const trip = await Trip.findOneAndUpdate(
+        { _id: tripId },
+        { status: "accepted" },
+        { new: true }
+    );
+    
+    if (!trip)
+      return res.status(404).json({ success: false, message: "Trip not found or already ended" });
+    
+    const io = getIo();
+    io.to(trip.user.toString()).emit("trip_accepted", { trip });
+  
+    res.json({ success: true, message: "Trip accepted", trip });
+  } catch (error) {
+    console.error(error);
+  }
+}
