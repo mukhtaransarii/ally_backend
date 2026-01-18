@@ -20,7 +20,14 @@ const tripSchema = new mongoose.Schema({
     type: String,
     enum: ["pending", "accepted", "completed", "cancelled"],
     default: "pending"
-  }
+  },
+  
+  // cancelled after trip accepted
+  cancelledBy: {
+    type: String,
+    enum: ["user", "companion"],
+  },
+  cancelReason: String,
 }, { timestamps: true });
 
 export default mongoose.model("Trip", tripSchema);

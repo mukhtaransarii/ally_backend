@@ -24,7 +24,7 @@ export const findNearestCompanion = async (req, res) => {
 
     if (!partners.length)
       return res.json({
-        success: true,
+        success: false,
         companions: [],
         message: "No companions nearby, wait a bit.",
       });
