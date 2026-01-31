@@ -6,7 +6,7 @@ import { getIo } from "../socket.js"
 export const confirmTrip = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { companionId, pickup, distance, duration } = req.body;
+    const { companionId, companionAddress, pickup, distance, duration } = req.body;
 
     if (!companionId || !pickup) return res.status(400).json({ success: false, message: "Missing data" });
     
@@ -29,6 +29,7 @@ export const confirmTrip = async (req, res) => {
     let trip = await Trip.create({
       user: userId,
       companion: companionId,
+      companionAddress,
       pickup,
       distance,
       duration,

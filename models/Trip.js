@@ -4,6 +4,8 @@ const tripSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   companion: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 
+  companionAddress: {type: Object},
+
   pickup: {
     lat: Number,
     lng: Number,
@@ -12,7 +14,7 @@ const tripSchema = new mongoose.Schema({
 
   distance: String,
   duration: String,
-
+  
   otp: String,
   otpVerified: { type: Boolean, default: false },
 
